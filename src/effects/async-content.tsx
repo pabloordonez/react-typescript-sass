@@ -1,9 +1,14 @@
-import { ComponentClass, useState, useEffect, Props, Component } from "react";
+import { useState, useEffect, ComponentType, PropsWithChildren, ReactElement } from "react";
 import React from "react";
 
-function getDisplayName(WrappedComponent: ComponentClass)
+function getDisplayName(WrappedComponent: ComponentType): string
 {
     return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+}
+
+function setDisplayName(WrappedComponent: ComponentType, name: string): void
+{
+    WrappedComponent.displayName = name;
 }
 
 interface IAsyncCallState<T>
@@ -30,29 +35,33 @@ export function useAsyncCall<T = any>(promiseFn: PromiseFunction<T>)
     return { loading, error, content };
 }
 
-export interface IAsyncContentWrapperProps {
-    loadingComponent?: Component;
-    errorComponent?: Component;
-    noContentComponent?: Component;
+export interface IAsyncContentWrapperProps
+{
+    loadingComponent?: ComponentType;
+    errorComponent?: ComponentType;
+    noContentComponent?: ComponentType;
 }
 
-export interface IAsyncContentProps<T> {
+export interface IAsyncContentProps<T>
+{
     content?: T;
 }
 
-export function withAsyncContent<T = any>(WrappedComponent: ComponentClass<IAsyncContentProps<T>>, promiseFn: PromiseFunction<T>): Component<IAsyncContentProps<T>> | JSX.Element
+export type AsyncComponentType<T> = ComponentType<IAsyncContentProps<T>>;
+
+export function withAsyncContent<T = any>(WrappedComponent: AsyncComponentType<T>, promiseFn: PromiseFunction<T>): AsyncComponentType<T>
 {
-    const WithAsyncContent = (props: IAsyncContentWrapperProps): ComponentClass<IAsyncContentProps<T>> =>
+    const WithAsyncContent = (props: PropsWithChildren<IAsyncContentWrapperProps>):  ReactElement =>
     {
         const { loading, error, content } = useAsyncCall(promiseFn);
-        const loadingComponent = loading && (props.loadingComponent || <div>Loading...</div>);
+        const loadingComponent = (loading && (props.loadingComponent || <div>Loading...</div>)) as ReactElement;
         const errorComponent = error && (props.errorComponent || <div style={{ color: 'red' }}>{error.message}</div>);
         const noContentComponent = !content && (props.noContentComponent || <div>There's no content</div>);
         const contentComponent = <WrappedComponent content={content} {...props} />;
 
-        return (loadingComponent || errorComponent || noContentComponent || contentComponent) as ComponentClass<IAsyncContentProps<T>>;
+        return (loadingComponent || errorComponent || noContentComponent || contentComponent);
     };
 
-    WithAsyncContent.displayName = `WithAsyncContent(${getDisplayName(WrappedComponent)})`;
+    setDisplayName(WithAsyncContent, `WithAsyncContent(${getDisplayName(WrappedComponent)})`);
     return WithAsyncContent;
 }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { ReactElement } from 'react';
 import './App.scss';
 import { IAsyncContentProps, withAsyncContent } from '../../effects/async-content';
 
@@ -21,16 +21,16 @@ class GithubStatusService
         return await this.get('incidents.json');
     }
 
-    async get(url): Promise<any>
+    async get(url: string): Promise<any>
     {
         const response = await fetch(`${this.baseUrl}/${url}`);
         return await response.json();
     }
 }
 
-function IncidentList(props: IAsyncContentProps<any>): Component
+function IncidentList(props: IAsyncContentProps<any>): ReactElement
 {
-    return props.content.incidents.map(x => (
+    return props.content.incidents.map((x: any) => (
         <div key={x.id}>
             <span>{x.name}</span>(<span style={{ color: 'green' }}>{x.status}</span>)
         </div>));
@@ -47,7 +47,10 @@ const AsyncIncidentList = withAsyncContent<any>(IncidentList, GetIncidents);
 function App()
 {
     return (
-        <h1>App</h1>
+        <>
+            <h1>App</h1>
+            <AsyncIncidentList />
+        </>
     );
 }
 
