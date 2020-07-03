@@ -1,8 +1,8 @@
 import './App.scss';
-import { Incidents } from './Incidents';
+import { Incidents } from '../github/Incidents';
 import React from 'react';
-import { Summary } from './Summary';
-import { Status } from './Status';
+import { Summary } from '../github/Summary';
+import { Status } from '../github/Status';
 
 function App()
 {
