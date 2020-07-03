@@ -35,11 +35,11 @@ export function useAsyncCall<T = any>(promiseFn: PromiseFunction<T>)
     return { loading, error, content };
 }
 
-export interface IAsyncContentWrapperProps
+interface IAsyncContentWrapperProps
 {
-    loadingComponent?: ComponentType;
-    errorComponent?: ComponentType;
-    noContentComponent?: ComponentType;
+    loadingComponent?: ReactElement;
+    errorComponent?: ReactElement;
+    noContentComponent?: ReactElement;
 }
 
 export interface IAsyncContentProps<T>
@@ -47,9 +47,9 @@ export interface IAsyncContentProps<T>
     content?: T;
 }
 
-export type AsyncComponentType<T> = ComponentType<IAsyncContentProps<T>>;
+export type AsyncComponentType = ComponentType<IAsyncContentWrapperProps>;
 
-export function withAsyncContent<T = any>(WrappedComponent: AsyncComponentType<T>, promiseFn: PromiseFunction<T>): AsyncComponentType<T>
+export function withAsyncContent<T = any>(WrappedComponent: ComponentType<IAsyncContentProps<T>>, promiseFn: PromiseFunction<T>): AsyncComponentType
 {
     const WithAsyncContent = (props: PropsWithChildren<IAsyncContentWrapperProps>):  ReactElement =>
     {
