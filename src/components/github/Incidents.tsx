@@ -1,41 +1,35 @@
 import React, { ReactElement } from 'react';
 import { IAsyncContentProps, withAsyncContent } from '../../effects/async-content';
-import { Incident, Incidents as IncidentsModel } from '../../services/http/github/models/Incidents';
+import { Incidents as IncidentsModel } from '../../services/http/github/models/Incidents';
 import { getIncidents } from '../../services/http/github/GithubStatusService';
+import { IncidentList } from './IncidentList';
 
-function IncidentList(props: IAsyncContentProps<IncidentsModel>): ReactElement
+function IncidentsSection(props: IAsyncContentProps<IncidentsModel>): ReactElement
 {
-    const hasIncidents = props.content?.incidents && props.content.incidents.length > 0;
-    const incidents = hasIncidents && props.content?.incidents.map((x: Incident) => (
-        <div key={x.id}>
-            <span>{x.name}</span> (<span style={{ color: 'green' }}>{x.status}</span>)
-        </div>));
+    const content = props?.content || { page: {}, incidents: {} } as IncidentsModel;
 
     return (
         <section>
-            <h2>Incidents</h2>
-            <div>
-                <div>
-                    <label>Name: </label>
-                    <span>{props.content?.page.name}</span>
+            <h2>Past Incidents</h2>
+            <div className="separator">
+                <div className="field">
+                    <label>Name</label>
+                    <span>{content.page.name}</span>
                 </div>
-                <div>
-                    <label>Url: </label>
-                    <span>{props.content?.page.url}</span>
+                <div className="field">
+                    <label>Url</label>
+                    <a href={content.page.url}>{content.page.url}</a>
                 </div>
-                <div>
-                    <label>Updated: </label>
-                    <span>{props.content?.page.updated_at}</span>
+                <div className="field">
+                    <label>Updated</label>
+                    <span>{content.page.updated_at && new Date(content.page.updated_at).toLocaleDateString()}</span>
                 </div>
             </div>
-            {
-                (hasIncidents && <div> {incidents} </div>) ||
-                (!hasIncidents && <div> There's no reported incidents.</div>)
-            }
+            <IncidentList incidents={content.incidents} />
         </section>
     );
 }
 
-export const Incidents = withAsyncContent(IncidentList, getIncidents);
+export const Incidents = withAsyncContent(IncidentsSection, getIncidents);
 
 

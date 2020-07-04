@@ -1,41 +1,34 @@
 import React, { ReactElement } from 'react';
 import { IAsyncContentProps, withAsyncContent } from '../../effects/async-content';
-import { Summary as SummaryModel, Incident } from '../../services/http/github/models/Summary';
+import { Summary as SummaryModel } from '../../services/http/github/models/Summary';
 import { getSummary } from '../../services/http/github/GithubStatusService';
+import { IncidentList } from './IncidentList';
 
-function SummaryList(props: IAsyncContentProps<SummaryModel>): ReactElement
+function SummarySection(props: IAsyncContentProps<SummaryModel>): ReactElement
 {
-    const hasIncidents = props.content?.incidents && props.content.incidents.length > 0;
-    const incidents = hasIncidents && props.content?.incidents.map((x: Incident) => (
-        <div key={x.id}>
-            <span>{x.name}</span> (<span style={{ color: 'green' }}>{x.status}</span>)
-        </div>));
-
+    const content = props?.content || { page: {}, incidents: {} } as SummaryModel;
     return (
         <section>
             <h2>Summary</h2>
-            <div>
-                <div>
-                    <label>Name: </label>
-                    <span>{props.content?.page.name}</span>
+            <div className="separator">
+                <div className="field">
+                    <label>Name</label>
+                    <span>{content.page.name}</span>
                 </div>
-                <div>
-                    <label>Url: </label>
-                    <span>{props.content?.page.url}</span>
+                <div className="field">
+                    <label>Url</label>
+                    <a href={content.page.url}>{content.page.url}</a>
                 </div>
-                <div>
-                    <label>Updated: </label>
-                    <span>{props.content?.page.updated_at}</span>
+                <div className="field">
+                    <label>Updated</label>
+                    <span>{content.page.updated_at && new Date(content.page.updated_at).toLocaleDateString()}</span>
                 </div>
             </div>
-            {
-                (hasIncidents && <div> {incidents} </div>) ||
-                (!hasIncidents && <div> There's no reported incidents.</div>)
-            }
+            <IncidentList incidents={content.incidents} />
         </section >
     );
 }
 
-export const Summary = withAsyncContent(SummaryList, getSummary);
+export const Summary = withAsyncContent(SummarySection, getSummary);
 
 

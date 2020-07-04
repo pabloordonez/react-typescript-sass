@@ -1,0 +1,82 @@
+@import "./../../styles/colors.scss";
+
+* {
+    color: $dark;
+}
+
+h1 {
+    margin: 20px;
+}
+
+body {
+    background-color: $light;
+}
+
+main {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+    @media (max-width: 1024px) {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    section {
+        display: flex;
+        flex-direction: column;
+        justify-items: center;
+        background: white;
+        border-radius: 2px;
+        padding: 20px;
+        animation: fade-in 1s;
+        box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2);
+        min-height: 300px;
+
+        h2 {
+            font-weight: 600;
+        }
+
+        .loading {
+            margin: auto;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 15px;
+            justify-content: flex-start;
+            align-items: flex-start;
+
+            label {
+                font-weight: 700;
+                font-size: .7em;
+                color: #707070;
+            }
+
+            a {
+                color: #2B83FF;
+                text-decoration: none;
+            }
+        }
+    }
+
+    .separator {
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+
+    .incidents {
+        overflow-y: auto;
+    }
+
+}
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

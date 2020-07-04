@@ -3,37 +3,39 @@ import { IAsyncContentProps, withAsyncContent } from '../../effects/async-conten
 import { Status as StatusModel } from '../../services/http/github/models/Status';
 import { getStatus } from '../../services/http/github/GithubStatusService';
 
-function StatusList(props: IAsyncContentProps<StatusModel>): ReactElement
+function StatusSection(props: IAsyncContentProps<StatusModel>): ReactElement
 {
+    const content = props?.content || { page: {}, status: {} } as StatusModel;
+
     return (
         <section>
-            <h2>Status</h2>
-            <div>
-                <div>
-                    <label>Name: </label>
-                    <span>{props.content?.page.name}</span>
+            <h2>Current Status</h2>
+            <div className="separator">
+                <div className="field">
+                    <label>Name</label>
+                    <span>{content.page.name}</span>
                 </div>
-                <div>
-                    <label>Url: </label>
-                    <span>{props.content?.page.url}</span>
+                <div className="field">
+                    <label>Url</label>
+                    <a href={content.page.url}>{content.page.url}</a>
                 </div>
-                <div>
-                    <label>Updated: </label>
-                    <span>{props.content?.page.updated_at}</span>
+                <div className="field">
+                    <label>Updated</label>
+                    <span>{content.page.updated_at && new Date(content.page.updated_at).toLocaleDateString()}</span>
                 </div>
-                <div>
-                    <label>Indicator: </label>
-                    <span>{props.content?.status.indicator}</span>
+                <div className="field">
+                    <label>Indicator</label>
+                    <span>{content.status.indicator}</span>
                 </div>
-                <div>
-                    <label>Status: </label>
-                    <span>{props.content?.status.description}</span>
+                <div className="field">
+                    <label>Status</label>
+                    <span>{content.status.description}</span>
                 </div>
             </div>
         </section >
     );
 }
 
-export const Status = withAsyncContent(StatusList, getStatus);
+export const Status = withAsyncContent(StatusSection, getStatus);
 
 
