@@ -30,6 +30,15 @@ export function IncidentList(props: PropsWithChildren<{ incidents: Incident[]; }
                 <label>Resolved</label>
                 <span>{x.resolved_at && new Date(x.resolved_at).toLocaleDateString()}</span>
             </div>
+            <div className="incident-updates">
+                <h3>Updates</h3>
+                {x.incident_updates.map(i => (
+                    <div className="incident" key={i.id}>
+                        <span>{i.body}</span>
+                        <span className={`incident-status ${i.status}`}>{i.status}</span>
+                    </div>
+                    ))}
+            </div>
         </div>));
 
     return ((hasIncidents && <div className="incidents"> {incidentElements} </div>) ||
