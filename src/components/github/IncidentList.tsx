@@ -34,8 +34,8 @@ export function IncidentList(props: PropsWithChildren<{ incidents: Incident[]; }
                 <h3>Updates</h3>
                 {x.incident_updates.map(i => (
                     <div className="incident" key={i.id}>
-                        <span>{i.body}</span>
                         <span className={`incident-status ${i.status}`}>{i.status}</span>
+                        <span>{i.body}</span>
                     </div>
                     ))}
             </div>

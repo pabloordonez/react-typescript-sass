@@ -7,6 +7,7 @@ import { IncidentList } from './IncidentList';
 function SummarySection(props: IAsyncContentProps<SummaryModel>): ReactElement
 {
     const content = props?.content || { page: {}, incidents: {} } as SummaryModel;
+
     return (
         <section>
             <h2>Summary</h2>

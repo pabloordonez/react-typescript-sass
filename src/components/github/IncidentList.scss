@@ -14,7 +14,7 @@
             display: grid;
             grid-auto-rows: initial;
             align-items: auto;
-            gap: 5px;
+            gap: 10px;
 
             h3 {
                 font-weight: 600;
@@ -22,7 +22,8 @@
 
             .incident {
                 display: grid;
-                grid-template-columns: 1fr fit-content(20%);
+                grid-template-columns: fit-content(20%) 1fr;
+                gap: 5px;
             }
         }
 
